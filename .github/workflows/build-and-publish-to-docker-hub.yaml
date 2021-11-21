@@ -8,7 +8,7 @@ on:
     - main
 
 env:
-  project: 'gotrue'
+  project: 'zygo'
   NAME   : 'senthilsweb/zygo'
 
 jobs:
