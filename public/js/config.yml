@@ -1,0 +1,15 @@
+notification:
+  teams:
+    webhook_url: ""
+    subject_line: ""
+    req_json_query: ""
+  slack:
+    token: ""
+    channel: ""
+  jira:
+    url: ""
+    api_version: latest
+    username: ""
+    token: ""
+    timezone: "Europe/Istanbul"
+  
