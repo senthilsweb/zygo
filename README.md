@@ -1,7 +1,7 @@
 
 # Introduction
 
-A multipurpose notification library to send mail, text, slack, push, telegram etc. developed in `Go`
+A multipurpose backend server api to send mail, text, slack, push, telegram etc. developed in `Go`
 
 ## Design Goals
 
