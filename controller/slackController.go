@@ -70,7 +70,8 @@ func NotifySlack(c *gin.Context) {
 }
 
 func PostMessageInPrivateChannel(payload string) {
-
+	log.Info("Posting Message In Private Channel")
+	log.Info(payload)
 	request_body := payload
 
 	token := utils.GetValElseSetEnvFallback(request_body, "SLACK_TOKEN")
@@ -82,7 +83,7 @@ func PostMessageInPrivateChannel(payload string) {
 	// for as many services as you like and just tell the notifier to use them.
 	notifier.UseServices(slackService)
 	subject := gjson.Get(request_body, "message.subject")
-	body := gjson.Get(request_body, "message.payload")
+	body := gjson.Get(request_body, "message.body")
 	log.Info("subject = " + subject.String())
 	log.Info("subject = " + body.String())
 
@@ -98,5 +99,6 @@ func PostMessageInPrivateChannel(payload string) {
 		log.Fatal(err)
 	}
 	log.Info("Slack notification was successful")
+	log.Info("Posted Message In Private Channel")
 	return
 }

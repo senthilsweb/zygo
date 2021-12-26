@@ -12,6 +12,6 @@ services:
       - "3333:3000"
     environment:
       - API_SECRET=''
-
+     
 networks:
   backend:
