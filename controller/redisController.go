@@ -116,9 +116,12 @@ func Publish(c *gin.Context) {
 	return
 }
 
+//This method is to receive the message sent by netlify to redis
 func SubscribeAndReceiveMessage() {
 	log.Info("Inside SubscribeAndReceiveMessage")
-	redis_uri := "rediss://:b3cd263ba8f14f32b7dee9907577d089@us1-deciding-kodiak-34245.upstash.io:34245"
+	//redis_uri := utils.GetValElseSetEnvFallback(request_body, "REDIS_URI")
+	redis_uri := os.Getenv("REDIS_URI")
+	log.Info("redis_uri = " + redis_uri)
 	opt, _ := redis.ParseURL(redis_uri)
 	client := redis.NewClient(opt)
 	ctx := context.Background()

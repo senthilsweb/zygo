@@ -9,6 +9,7 @@ import (
 	"runtime"
 	"strconv"
 
+	"github.com/senthilsweb/zygo/controller"
 	"github.com/senthilsweb/zygo/pkg/router"
 	"github.com/senthilsweb/zygo/pkg/utils"
 
@@ -62,9 +63,9 @@ func main() {
 
 	flag.Parse()
 
-	//go func() {
-	//	go task.SubscribeAndReceiveMessage()
-	//}()
+	go func() {
+		go controller.SubscribeAndReceiveMessage()
+	}()
 
 	startServer()
 
