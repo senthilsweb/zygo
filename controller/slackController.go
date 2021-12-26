@@ -82,8 +82,8 @@ func PostMessageInPrivateChannel(payload string) {
 	// Tell our notifier to use the Slack service. You can repeat the above process
 	// for as many services as you like and just tell the notifier to use them.
 	notifier.UseServices(slackService)
-	subject := gjson.Get(request_body, "message.subject")
-	body := gjson.Get(request_body, "message.body")
+	subject := gjson.Get(request_body, "subject")
+	body := gjson.Get(request_body, "body")
 	log.Info("subject = " + subject.String())
 	log.Info("subject = " + body.String())
 
