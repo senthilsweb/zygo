@@ -125,7 +125,7 @@ func SubscribeAndReceiveMessage() {
 	opt, _ := redis.ParseURL(redis_uri)
 	client := redis.NewClient(opt)
 	ctx := context.Background()
-	topic := client.Subscribe(ctx, "order")
+	topic := client.Subscribe(ctx, "zynomi-website-lead")
 	defer topic.Close()
 
 	for {
