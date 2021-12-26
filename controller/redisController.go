@@ -41,7 +41,7 @@ func Enqueue(c *gin.Context) {
 	log.Info("kv_value=" + kv_body)
 
 	client.Set(ctx, kv_key, kv_body, 0)
-	c.JSON(200, gin.H{"success": "true", "message": "Successfully Enqueued", "key": kv_key + ":" + uuid})
+	c.JSON(200, gin.H{"success": "true", "message": "Successfully Enqueued", "key": kv_key})
 	return
 }
 
@@ -96,7 +96,7 @@ func GetEnvironment(c *gin.Context) {
 func Publish(c *gin.Context) {
 	request_body := utils.GetStringFromGinRequestBody(c)
 	channel := gjson.Get(request_body, "message.channel").String()
-	payload := gjson.Get(request_body, "message.payload").String()
+	//payload := gjson.Get(request_body, "message.payload").String()
 
 	redis_uri := utils.GetValElseSetEnvFallback(request_body, "REDIS_URI")
 
@@ -106,7 +106,7 @@ func Publish(c *gin.Context) {
 	ctx := context.Background()
 	client.Set(ctx, "last_publish_message", request_body, 0)
 
-	err := client.Publish(ctx, channel, payload).Err()
+	err := client.Publish(ctx, channel, request_body).Err()
 	if err != nil {
 		c.JSON(500, gin.H{"success": "false", "message": "Message publish failed.", "exception": err})
 		return

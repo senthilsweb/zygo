@@ -12,6 +12,6 @@ services:
       - "3333:3000"
     environment:
       - API_SECRET=''
-      - REDIS_URI=rediss://:b3cd263ba8f14f32b7dee9907577d089@us1-deciding-kodiak-34245.upstash.io:34245
+
 networks:
   backend:

@@ -83,6 +83,8 @@ func PostMessageInPrivateChannel(payload string) {
 	notifier.UseServices(slackService)
 	subject := gjson.Get(request_body, "message.subject")
 	body := gjson.Get(request_body, "message.payload")
+	log.Info("subject = " + subject.String())
+	log.Info("subject = " + body.String())
 
 	// Send a message
 	err := notifier.Send(
