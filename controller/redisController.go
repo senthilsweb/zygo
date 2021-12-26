@@ -119,7 +119,6 @@ func Publish(c *gin.Context) {
 //This method is to receive the message sent by netlify to redis
 func SubscribeAndReceiveMessage() {
 	log.Info("Inside SubscribeAndReceiveMessage")
-	//redis_uri := utils.GetValElseSetEnvFallback(request_body, "REDIS_URI")
 	redis_uri := os.Getenv("REDIS_URI")
 	log.Info("redis_uri = " + redis_uri)
 	opt, _ := redis.ParseURL(redis_uri)
@@ -135,6 +134,9 @@ func SubscribeAndReceiveMessage() {
 			log.Error(err)
 		}
 		log.Info("Message Received" + msg.Payload)
+		log.Info("Posting message to slack")
+		PostMessageInPrivateChannel(msg.Payload)
+		log.Info("Posted message to slack")
 		client.Set(ctx, "last_received_message", msg.Payload, 0)
 	}
 }

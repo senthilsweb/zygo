@@ -68,3 +68,33 @@ func NotifySlack(c *gin.Context) {
 	c.JSON(200, gin.H{"success": "true", "message": "Slack notification was successful"})
 	return
 }
+
+func PostMessageInPrivateChannel(payload string) {
+
+	request_body := payload
+
+	token := utils.GetValElseSetEnvFallback(request_body, "SLACK_TOKEN")
+	channel := utils.GetValElseSetEnvFallback(request_body, "SLACK_CHANNEL")
+	notifier := notify.New()
+	slackService := slack.New(token)
+	slackService.AddReceivers(channel)
+	// Tell our notifier to use the Slack service. You can repeat the above process
+	// for as many services as you like and just tell the notifier to use them.
+	notifier.UseServices(slackService)
+	subject := gjson.Get(request_body, "message.subject")
+	body := gjson.Get(request_body, "message.payload")
+
+	// Send a message
+	err := notifier.Send(
+		context.Background(),
+		subject.String(),
+		body.String(),
+	)
+
+	if err != nil {
+		log.Info("Slack notification failed")
+		log.Fatal(err)
+	}
+	log.Info("Slack notification was successful")
+	return
+}
