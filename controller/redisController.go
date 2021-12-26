@@ -49,6 +49,7 @@ func Dequeue(c *gin.Context) {
 	log.Info("Inside Dequeue")
 	request_body := utils.GetStringFromGinRequestBody(c)
 	kv_key := c.Param("key")
+	log.Info("kv_key = " + kv_key)
 	redis_uri := utils.GetValElseSetEnvFallback(request_body, "REDIS_URI")
 
 	opt, _ := redis.ParseURL(redis_uri)

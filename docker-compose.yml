@@ -1,31 +1,16 @@
 version: "3.7"
 
 services:
-  api.zygo:
+  zygo:
     image: senthilsweb/zygo:latest
-    container_name: api.zygo
+    container_name: zygo
     networks:
       - backend
     restart: unless-stopped
     tty: true
     ports:
-      - "4000:3000"
+      - "9000:3000"
     environment:
       - API_SECRET=''
-  db.postgres:
-    image: postgres:13
-    container_name: db.postgres
-    networks:
-      - backend
-    environment:
-      POSTGRES_DB: zypress_db
-      POSTGRES_USER: zypress_user
-      POSTGRES_PASSWORD: zypress_pwd
-    ports:
-      - 5532:5432
-    volumes:
-      - ./data:/docker-entrypoint-initdb.d
-      - ./data/postgres_db:/var/lib/postgresql/data
 networks:
-  frontend:
   backend:

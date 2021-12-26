@@ -3,6 +3,7 @@ module github.com/senthilsweb/zygo
 go 1.16
 
 require (
+	github.com/Jeffail/gabs v1.4.0 // indirect
 	github.com/apex/gateway v1.1.2
 	github.com/aymerick/raymond v2.0.2+incompatible
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
