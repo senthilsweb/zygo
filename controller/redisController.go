@@ -72,6 +72,8 @@ func List(c *gin.Context) {
 	key_prefix := gjson.Get(request_body, "key_prefix").String()
 	redis_uri := utils.GetValElseSetEnvFallback(request_body, "REDIS_URI")
 
+	log.Info("request_body=" + request_body)
+
 	if page <= 0 {
 		c.JSON(500, gin.H{"success": "false", "message": "invalid page"})
 		return
@@ -112,6 +114,7 @@ func List(c *gin.Context) {
 
 		res = append(res, jsonMap)
 	}
+	log.Info(res)
 
 	c.JSON(200, gin.H{"success": "true", "message": "Successfully Dequeued", "data": res})
 	return
