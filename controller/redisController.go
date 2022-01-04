@@ -3,6 +3,7 @@ package controller
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"os"
 	"strings"
 
@@ -64,6 +65,58 @@ func Dequeue(c *gin.Context) {
 	return
 }
 
+func list(c *gin.Context) {
+	log.Info("List")
+	request_body := utils.GetStringFromGinRequestBody(c)
+	page := gjson.Get(request_body, "page").Int()
+	key_prefix := gjson.Get(request_body, "key_prefix").String()
+	redis_uri := utils.GetValElseSetEnvFallback(request_body, "REDIS_URI")
+
+	if page <= 0 {
+		c.JSON(500, gin.H{"success": "false", "message": "invalid page"})
+		return
+	}
+
+	const pageSize int64 = 20
+	from, to := (int64(page)-1)*pageSize, int64(page)*pageSize-1
+
+	opt, _ := redis.ParseURL(redis_uri)
+	client := redis.NewClient(opt)
+	ctx := context.Background()
+
+	ids, err := client.LRange(ctx, key_prefix, from, to).Result()
+	if err != nil {
+		c.JSON(500, gin.H{"success": "false", "message": "Failure", "exception": err})
+	}
+
+	var cmds []*redis.SliceCmd
+	_, err = client.Pipelined(ctx, func(pipe redis.Pipeliner) error {
+		for _, keyId := range ids {
+			cmds = append(cmds, pipe.HMGet(ctx, fmt.Sprintf(key_prefix+":%s", keyId)))
+		}
+		return nil
+	})
+	if err != nil {
+		c.JSON(500, gin.H{"success": "false", "message": "Failure", "exception": err})
+	}
+
+	var jsonMap map[string]string
+	var res []interface{}
+
+	for _, c := range cmds {
+		id := fmt.Sprint(c.Val())
+
+		val := client.Get(ctx, id).Val()
+
+		json.Unmarshal([]byte(val), &jsonMap)
+
+		res = append(res, jsonMap)
+	}
+
+	c.JSON(200, gin.H{"success": "true", "message": "Successfully Dequeued", "data": res})
+	return
+}
+
 func Swissknife(c *gin.Context) {
 	request_body := utils.GetStringFromGinRequestBody(c)
 	redis_uri := utils.GetValElseSetEnvFallback(request_body, "REDIS_URI")
@@ -94,6 +147,7 @@ func GetEnvironment(c *gin.Context) {
 }
 
 func Publish(c *gin.Context) {
+	log.Info("Inside Publish")
 	request_body := utils.GetStringFromGinRequestBody(c)
 	channel := gjson.Get(request_body, "message.channel").String()
 	//payload := gjson.Get(request_body, "message.payload").String()
@@ -107,10 +161,13 @@ func Publish(c *gin.Context) {
 	client.Set(ctx, "last_publish_message", request_body, 0)
 
 	err := client.Publish(ctx, channel, request_body).Err()
+
 	if err != nil {
 		c.JSON(500, gin.H{"success": "false", "message": "Message publish failed.", "exception": err})
 		return
 	}
+
+	log.Info("Message body " + request_body)
 
 	c.JSON(200, gin.H{"success": "true", "message": "Message has been published successfully"})
 	return

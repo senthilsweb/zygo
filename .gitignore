@@ -27,3 +27,5 @@ server.api.golang/bin/zybes*
 *.log
 zygo
 functions/zygo
+docker-compose.yml
+.env
