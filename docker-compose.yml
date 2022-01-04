@@ -12,8 +12,6 @@ services:
       - "3333:3000"
     environment:
       - API_SECRET=''
-      - SLACK_TOKEN=xoxb-2804485819572-2885075919860-P5yyXpF8svkSlnhk8Rhb7nu3
-      - SLACK_CHANNEL=C02RS31JTFG
-      - REDIS_URI=rediss://:b3cd263ba8f14f32b7dee9907577d089@us1-deciding-kodiak-34245.upstash.io:34245
+  
 networks:
   backend:
