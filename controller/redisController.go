@@ -65,7 +65,7 @@ func Dequeue(c *gin.Context) {
 	return
 }
 
-func list(c *gin.Context) {
+func List(c *gin.Context) {
 	log.Info("List")
 	request_body := utils.GetStringFromGinRequestBody(c)
 	page := gjson.Get(request_body, "page").Int()

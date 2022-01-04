@@ -51,6 +51,7 @@ func Setup() *gin.Engine {
 	r.POST("/api/redis/enqueue", controller.Enqueue)
 	r.POST("/api/redis/publish", controller.Publish)
 	r.GET("/api/redis/dequeue/:key", controller.Dequeue)
+	r.GET("/api/redis/list", controller.List)
 	r.GET("/api/ev/:key", controller.GetEnvironment)
 
 	r.POST("/api/redis/hook/swissknife", controller.Swissknife)
